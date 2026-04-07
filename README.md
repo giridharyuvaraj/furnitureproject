@@ -90,6 +90,26 @@ Furnit/
 - 🐬 MySQL Server (Local / Cloud)
 - 📦 Maven
 
+---
+
+## 🚀 Deployment
+
+This project is optimized for a hybrid cloud deployment: **Render** for the backend and **Vercel** for the frontend.
+
+### 1️⃣ Backend (Render)
+- **Service**: Web Service
+- **Runtime**: Docker (using the provided `Dockerfile`)
+- **Config**: Add all backend-specific variables to the Render "Environment" tab (`DB_URL`, `JWT_SECRET`, etc.).
+- **URL**: Note your deployed backend URL (e.g., `https://your-app.onrender.com`).
+
+### 2️⃣ Frontend (Vercel)
+- **Framework**: Create React App
+- **Root Directory**: `furniture-frontend`
+- **Environment Variables**:
+  - `REACT_APP_API_BASE_URL`: Your backend URL + `/api` (e.g., `https://your-app.onrender.com/api`).
+  - `REACT_APP_STRIPE_PUBLISHABLE_KEY`: Your Stripe public key.
+- **Rewrites**: Support for SPA routing is pre-configured in `vercel.json`.
+
 ## 📄 License
 
 This project is developed to showcase my father's furniture business through a modern e-commerce platform.
