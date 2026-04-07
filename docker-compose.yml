@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: furniture-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: defaultdb
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_USER: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./furniture-backend
+      dockerfile: Dockerfile
+    container_name: furniture-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - DB_URL=jdbc:mysql://db:3306/defaultdb?allowPublicKeyRetrieval=true&useSSL=false
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - JWT_SECRET=your-secret-key-change-this
+      - STRIPE_SECRET_KEY=sk_test_...
+      # Mail variables (configure as needed)
+      - MAIL_USERNAME=test@gmail.com
+      - MAIL_PASSWORD=app-password
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./furniture-frontend
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=http://localhost:8080
+    container_name: furniture-frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
