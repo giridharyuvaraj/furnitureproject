@@ -17,7 +17,8 @@ public class CorsConfig {
                 registry.addMapping("/**")
                         .allowedOriginPatterns(
                                 "http://localhost:3000",
-                                "https://furnitureproject-xb9s.vercel.app")
+                                "https://furnitureproject-xb9s.vercel.app"
+                        )
                         .allowedMethods("*")
                         .allowedHeaders("*");
             }
