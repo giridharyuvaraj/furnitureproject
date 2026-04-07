@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllProducts } from "../../services/productService";
+import { API_BASE_URL } from "../../utils/constants";
 import ProductCard from "./ProductCard";
 import Loader from "../common/Loader";
 
@@ -24,7 +25,7 @@ const ProductList = () => {
         <div className="container">
           <div className="heading_container heading_center">
             <p className="text-danger">{error}</p>
-            <p className="text-muted">Ensure the backend is running on http://localhost:8080</p>
+            <p className="text-muted">Ensure the backend is reachable: {API_BASE_URL}</p>
           </div>
         </div>
       </section>

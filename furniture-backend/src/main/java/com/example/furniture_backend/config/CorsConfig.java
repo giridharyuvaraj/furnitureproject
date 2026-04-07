@@ -15,9 +15,9 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(
+                        .allowedOriginPatterns(
                                 "http://localhost:3000",
-                                "https://furnitureproject-l8lh.vercel.app"
+                                "https://*.vercel.app"
                         )
                         .allowedMethods("*")
                         .allowedHeaders("*");

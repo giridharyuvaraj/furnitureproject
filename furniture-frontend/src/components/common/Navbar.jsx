@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/slices/authSlice";
@@ -6,7 +6,7 @@ import { logout } from "../../redux/slices/authSlice";
 const Navbar = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const collapseRef = useRef(null);
+  const [isNavExpanded, setIsNavExpanded] = useState(false);
 
   const cartItems = useSelector((state) => state.cart.cartItems);
   const user = useSelector((state) => state.auth.user);
@@ -18,11 +18,7 @@ const Navbar = () => {
 
   // Close mobile menu when route changes
   useEffect(() => {
-    const collapseEl = collapseRef.current;
-    if (collapseEl && window.bootstrap) {
-      const bsCollapse = window.bootstrap.Collapse.getOrCreateInstance(collapseEl);
-      bsCollapse.hide();
-    }
+    setIsNavExpanded(false);
   }, [location]);
 
   return (
@@ -41,19 +37,20 @@ const Navbar = () => {
 
         {/* Mobile Toggle */}
         <button
-          className="navbar-toggler"
+          className={`navbar-toggler ${!isNavExpanded ? "collapsed" : ""}`}
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarContent"
+          onClick={() => setIsNavExpanded(!isNavExpanded)}
+          aria-controls="navbarContent"
+          aria-expanded={isNavExpanded}
+          aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
         {/* Navbar Content */}
         <div 
-          className="collapse navbar-collapse" 
+          className={`collapse navbar-collapse ${isNavExpanded ? "show" : ""}`} 
           id="navbarContent"
-          ref={collapseRef}
         >
 
           {/* Center Menu */}
@@ -136,7 +133,10 @@ const Navbar = () => {
                   <li>
                     <button
                       className="dropdown-item text-danger"
-                      onClick={() => dispatch(logout())}
+                      onClick={() => {
+                        dispatch(logout());
+                        setIsNavExpanded(false);
+                      }}
                     >
                       <img
                         src="/assests/images/icons/logout.png"
