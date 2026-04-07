@@ -1,9 +1,12 @@
-import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/slices/authSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const collapseRef = useRef(null);
 
   const cartItems = useSelector((state) => state.cart.cartItems);
   const user = useSelector((state) => state.auth.user);
@@ -12,6 +15,15 @@ const Navbar = () => {
     (sum, item) => sum + (item.quantity || 1),
     0
   );
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    const collapseEl = collapseRef.current;
+    if (collapseEl && window.bootstrap) {
+      const bsCollapse = window.bootstrap.Collapse.getOrCreateInstance(collapseEl);
+      bsCollapse.hide();
+    }
+  }, [location]);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light">
@@ -38,7 +50,11 @@ const Navbar = () => {
         </button>
 
         {/* Navbar Content */}
-        <div className="collapse navbar-collapse" id="navbarContent">
+        <div 
+          className="collapse navbar-collapse" 
+          id="navbarContent"
+          ref={collapseRef}
+        >
 
           {/* Center Menu */}
           <ul className="navbar-nav mx-auto gap-lg-4">
@@ -141,4 +157,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar;
