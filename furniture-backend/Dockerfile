@@ -6,13 +6,12 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Run Stage
-FROM openjdk:17-jdk
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
-# Expose port (Render uses $PORT)
+# Expose port
 EXPOSE 8080
 
-# Load environment variables from Render dashboard environment settings
-# Application listens on $PORT which is set by Render
+# Start app
 ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=${PORT:8080}"]
